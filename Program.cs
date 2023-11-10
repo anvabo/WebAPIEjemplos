@@ -61,6 +61,15 @@ internal class Program
             return usuarios.Baja(id);
         });
 
+        app.MapGet("/usuarios/listado", (string? filtro, int? resultadospagina, int? pagina, string? campoorden, string? orden, ClaseUsuarios usuarios) =>
+        {
+            var numeroregistrosReales = resultadospagina ?? 50;
+            var paginaReales = pagina ?? 0;
+
+            return usuarios.ObtenerSimple(paginaReales * numeroregistrosReales, numeroregistrosReales, campoorden ?? "", orden ?? "ASC", filtro ?? "");
+        }).WithMetadata(new SwaggerOperationAttribute("Consulta para listados", "Devuelve un listado completo de los usuarios")); ;
+
+
         app.MapGet("/usuarios", (string? filtro, int? resultadospagina, int? pagina, string? campoorden, string ?orden, string? campofiltro, ClaseUsuarios usuarios) =>
         {
             var numeroregistrosReales = resultadospagina ?? 50;
@@ -87,7 +96,6 @@ internal class Program
         app.UseSwagger();
         app.UseSwaggerUI();
 
-        //
 
         app.Run();
     }

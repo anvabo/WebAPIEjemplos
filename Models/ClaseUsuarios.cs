@@ -331,8 +331,20 @@ namespace ua.Models
 
         public List<ClaseUsuario> ObtenerSimple(int primerregistro = 0, int numeroregistros = 50, string campoorden = "", string orden = "ASC", string? filtro = "")
         {
-            var usuariosfiltrados = string.IsNullOrEmpty(filtro) ? Data : Data.Where(u => u.Nombre.Contains(filtro) || u.Email.Contains(filtro));
-            
+            var usuarios = Data;
+
+            orden = orden.ToUpper();
+
+            if (orden != "ASC" && orden != "DESC")
+            {
+                orden = "ASC";
+            }
+
+            filtro ??= "";
+            filtro = filtro.RemoveDiacritics();
+
+            var usuariosfiltrados = string.IsNullOrEmpty(filtro) ? usuarios : usuarios.Where(u => u.Nombre.RemoveDiacritics().Contains(filtro, StringComparison.CurrentCultureIgnoreCase) || u.Email.RemoveDiacritics().Contains(filtro, StringComparison.CurrentCultureIgnoreCase));
+
             // Ordenamos
             if (!string.IsNullOrEmpty(campoorden))
             {
