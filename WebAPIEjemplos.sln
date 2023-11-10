@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34221.43
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPIEjemplos", "WebAPIEjemplos.csproj", "{EB82442C-32D7-4D05-85CF-557C02974A7E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EB82442C-32D7-4D05-85CF-557C02974A7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB82442C-32D7-4D05-85CF-557C02974A7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB82442C-32D7-4D05-85CF-557C02974A7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB82442C-32D7-4D05-85CF-557C02974A7E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {85D8CF06-96EA-4628-950D-02F1E634AD5F}
+	EndGlobalSection
+EndGlobal
