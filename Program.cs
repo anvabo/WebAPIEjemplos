@@ -1,19 +1,22 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors;
 using Swashbuckle.AspNetCore.Annotations;
 using ua;
 using ua.Models;
 
 internal class Program
 {
+    public class ClaseEstadoUsuario
+    {
+        public bool Activo { get; set; }
+    }
     private static void Main(string[] args)
     {
-        //var UA = "UA";
         var builder = WebApplication.CreateBuilder(args);
                
-
         // Add services to the container.
-        //builder.Services.AddScoped<ClaseOracleBd>();
         builder.Services.AddSingleton<ClaseUsuarios>();
+        builder.Services.AddSingleton<ClaseTareas>();
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(x =>
@@ -23,45 +26,50 @@ internal class Program
 
 
         // Activar CORS
-        //builder.Services.AddCors(options =>
-        //{
-        //    options.AddPolicy(name: UA,
-        //                      builder =>
-        //                      {
-        //                          builder
-        //                              .AllowAnyOrigin() // Permite cualquier origen
-        //                              .AllowAnyHeader()
-        //                              .AllowAnyMethod();
-        //                      });
-        //});
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("UA", policy =>
+            {
+                policy.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+
+                //policy.WithOrigins("https://localhost:3000")
+                //    .WithMethods("PUT, GET, POST, DELETE")
+                //    .WithHeaders("Content-Type", "Authorization");
+            });
+        });
 
         var app = builder.Build();
 
-
-        //app.UseCors(UA);
+        
 
         // Configure the HTTP request pipeline.
 
         app.UseHttpsRedirection();
 
 
-        app.MapPost("/usuarios", (ClaseUsuario usuario, ClaseUsuarios usuarios) =>
+        app.UseCors("UA");
+
+
+        // USUARIOS
+        app.MapPost("/api/usuarios", (ClaseUsuario usuario, ClaseUsuarios usuarios) =>
         {
             return usuarios.Alta(usuario);
         });
 
-        app.MapPut("/usuarios/{id}", (ClaseUsuario usuario, ClaseUsuarios usuarios, int id) =>
+        app.MapPut("/api/usuarios/{id}", (ClaseUsuario usuario, ClaseUsuarios usuarios, int id) =>
         {
             if (usuario.Id != id) return Results.BadRequest();
             return Results.Ok(usuarios.Modificacion(usuario));
         });
 
-        app.MapDelete("/usuarios/{id}", (ClaseUsuarios usuarios, int id) =>
+        app.MapDelete("/api/usuarios/{id}", (ClaseUsuarios usuarios, int id) =>
         {
             return usuarios.Baja(id);
         });
 
-        app.MapGet("/usuarios/listado", (string? filtro, int? resultadospagina, int? pagina, string? campoorden, string? orden, ClaseUsuarios usuarios) =>
+        app.MapGet("/api/usuarios/listado", (string? filtro, int? resultadospagina, int? pagina, string? campoorden, string? orden, ClaseUsuarios usuarios) =>
         {
             var numeroregistrosReales = resultadospagina ?? 50;
             var paginaReales = pagina ?? 0;
@@ -70,14 +78,14 @@ internal class Program
         }).WithMetadata(new SwaggerOperationAttribute("Consulta para listados", "Devuelve un listado completo de los usuarios")); ;
 
 
-        app.MapGet("/usuarios", (string? filtro, int? resultadospagina, int? pagina, string? campoorden, string ?orden, string? campofiltro, ClaseUsuarios usuarios) =>
+        app.MapGet("/api/usuarios", (string? filtro, int? resultadospagina, int? pagina, string? campoorden, string ?orden, string? campofiltro, ClaseUsuarios usuarios) =>
         {
             var numeroregistrosReales = resultadospagina ?? 50;
             var paginaReales = pagina ?? 0;
             return usuarios.Obtener(paginaReales * numeroregistrosReales, numeroregistrosReales, campoorden ?? "", orden ?? "ASC", filtro ?? "", campofiltro ?? "ALL");
         }).WithMetadata(new SwaggerOperationAttribute("Consulta para DataTables", "Devuelve un listado con las personas que cumplen los criterios de búsquedas")); ;
 
-        app.MapGet("/usuarios/{id}", (int id, ClaseUsuarios usuarios) =>
+        app.MapGet("/api/usuarios/{id}", (int id, ClaseUsuarios usuarios) =>
         {
             var usuario = usuarios.BuscarxId(id);
 
@@ -91,10 +99,74 @@ internal class Program
             }
         });
 
-        
+        app.MapPut("/api/usuarios/activo/{id}", (int id, ClaseEstadoUsuario estado, ClaseUsuarios usuarios) =>
+        {
+            var usuario = usuarios.BuscarxId(id);
+
+            if (usuario == null)
+            {
+                return Results.NoContent();
+            }
+            else
+            {
+                usuario.Activo = estado.Activo;
+                return Results.Ok(usuario.Activo);
+            }
+        });
+
+
+        // TAREAS
+        app.MapPost("/api/tareas", (ClaseTarea tarea, ClaseTareas tareas) =>
+        {
+            return tareas.Alta(tarea);
+        });
+
+        app.MapPut("/api/tareas/{id}", (ClaseTarea tarea, ClaseTareas tareas, int id) =>
+        {
+            if (tarea.Id != id) return Results.BadRequest();
+            return Results.Ok(tareas.Modificacion(tarea));
+        });
+
+        app.MapDelete("/api/tareas/{id}", (ClaseTareas tareas, int id) =>
+        {
+            return tareas.Baja(id);
+        });
+
+        app.MapGet("/api/tareas/listado", (string? filtro, int? resultadospagina, int? pagina, string? campoorden, string? orden, ClaseTareas tareas) =>
+        {
+            var numeroregistrosReales = resultadospagina ?? 50;
+            var paginaReales = pagina ?? 0;
+
+            return tareas.ObtenerSimple(paginaReales * numeroregistrosReales, numeroregistrosReales, campoorden ?? "", orden ?? "ASC", filtro ?? "");
+        }).WithMetadata(new SwaggerOperationAttribute("Consulta para listados", "Devuelve un listado completo de los usuarios")); ;
+
+
+        app.MapGet("/api/tareas", (string? filtro, int? resultadospagina, int? pagina, string? campoorden, string? orden, string? campofiltro, ClaseTareas tareas) =>
+        {
+            var numeroregistrosReales = resultadospagina ?? 50;
+            var paginaReales = pagina ?? 0;
+            return tareas.Obtener(paginaReales * numeroregistrosReales, numeroregistrosReales, campoorden ?? "", orden ?? "ASC", filtro ?? "", campofiltro ?? "ALL");
+        }).WithMetadata(new SwaggerOperationAttribute("Consulta para DataTables", "Devuelve un listado con las personas que cumplen los criterios de búsquedas")); ;
+
+        app.MapGet("/api/tareas/{id}", (int id, ClaseTareas tareas) =>
+        {
+            var usuario = tareas.BuscarxId(id);
+
+            if (usuario == null)
+            {
+                return Results.NoContent();
+            }
+            else
+            {
+                return Results.Ok(usuario);
+            }
+        });
+
+
 
         app.UseSwagger();
         app.UseSwaggerUI();
+
 
 
         app.Run();

@@ -99,7 +99,8 @@ namespace ua.Models
                     Nombre = "María Rodríguez Martínez",
                     Codper = null,
                     Activo = true,
-                    SuperAdmin = false
+                    SuperAdmin = false,
+                    Foto = "https://randomuser.me/api/portraits/women/68.jpg"
                 },
                 new ClaseUsuario()
                 {
@@ -108,7 +109,8 @@ namespace ua.Models
                     Nombre = "Javier Fernández Sánchez",
                     Codper = null,
                     Activo = true,
-                    SuperAdmin = true
+                    SuperAdmin = true,
+                    Foto = "https://randomuser.me/api/portraits/men/43.jpg"
                 },
                 new ClaseUsuario()
                 {
@@ -153,7 +155,8 @@ namespace ua.Models
                     Nombre = "Andrea Pérez García",
                     Codper = null,
                     Activo = true,
-                    SuperAdmin = true
+                    SuperAdmin = true,
+                    Foto = "https://randomuser.me/api/portraits/women/79.jpg"
                 },
                 new ClaseUsuario()
                 {
