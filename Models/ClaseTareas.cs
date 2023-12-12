@@ -4,6 +4,11 @@ using ua.Models.DataTable;
 
 namespace ua.Models
 {
+    public class ClaseDatosAdicionales
+    {
+        public string Id { get; set; } = "";
+        public string Texto { get; set; } = "";
+    }
 
     public class ClaseTareas
     {
@@ -217,6 +222,20 @@ namespace ua.Models
 
             return salida;
         }
+
+        public Dictionary<string, List<ClaseDatosAdicionales>> DatosAdicionales() {
+            var salida = new Dictionary<string, List<ClaseDatosAdicionales>>
+            {
+                { "categorias", new List<ClaseDatosAdicionales>() }
+            };
+
+            var categorias = Data.SelectMany(u => u.Categorias).Distinct();
+            categorias = categorias.GroupBy(u => u.Id).Select(u => u.First());
+            salida["categorias"] = categorias.Select(u => new ClaseDatosAdicionales() { Id = u.Id.ToString(), Texto = u.Nombre }).ToList();
+
+            return salida;
+        }
+        
 
         public List<ClaseTarea> ObtenerSimple(int primerregistro = 0, int numeroregistros = 50, string campoorden = "", string orden = "ASC", string? filtro = "")
         {

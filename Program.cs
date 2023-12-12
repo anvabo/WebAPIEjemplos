@@ -140,6 +140,11 @@ internal class Program
             return tareas.ObtenerSimple(paginaReales * numeroregistrosReales, numeroregistrosReales, campoorden ?? "", orden ?? "ASC", filtro ?? "");
         }).WithMetadata(new SwaggerOperationAttribute("Consulta para listados", "Devuelve un listado completo de los usuarios")); ;
 
+        app.MapGet("/api/tareas/datosadicionales", (ClaseTareas tareas) =>
+        {
+            return tareas.DatosAdicionales();
+        }).WithMetadata(new SwaggerOperationAttribute("Recupera datos adicionales", "Devuelve un conjunto de listas de valores para campos adicionales")); ;
+
 
         app.MapGet("/api/tareas", (string? filtro, int? resultadospagina, int? pagina, string? campoorden, string? orden, string? campofiltro, ClaseTareas tareas) =>
         {
