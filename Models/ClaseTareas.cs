@@ -4,12 +4,6 @@ using ua.Models.DataTable;
 
 namespace ua.Models
 {
-    public class ClaseDatosAdicionales
-    {
-        public string Id { get; set; } = "";
-        public string Texto { get; set; } = "";
-    }
-
     public class ClaseTareas
     {
         
@@ -223,15 +217,15 @@ namespace ua.Models
             return salida;
         }
 
-        public Dictionary<string, List<ClaseDatosAdicionales>> DatosAdicionales() {
-            var salida = new Dictionary<string, List<ClaseDatosAdicionales>>
+        public Dictionary<string, List<ClaseDatosAdicionalesDataTable>> DatosAdicionales() {
+            var salida = new Dictionary<string, List<ClaseDatosAdicionalesDataTable>>
             {
-                { "categorias", new List<ClaseDatosAdicionales>() }
+                { "categorias", new List<ClaseDatosAdicionalesDataTable>() }
             };
 
             var categorias = Data.SelectMany(u => u.Categorias).Distinct();
             categorias = categorias.GroupBy(u => u.Id).Select(u => u.First());
-            salida["categorias"] = categorias.Select(u => new ClaseDatosAdicionales() { Id = u.Id.ToString(), Texto = u.Nombre }).ToList();
+            salida["categorias"] = categorias.Select(u => new ClaseDatosAdicionalesDataTable() { Id = u.Id.ToString(), Texto = u.Nombre }).ToList();
 
             return salida;
         }
