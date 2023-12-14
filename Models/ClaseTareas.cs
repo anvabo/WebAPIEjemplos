@@ -184,7 +184,13 @@ namespace ua.Models
             if (salida.NumeroRegistros > 0)
             {
                 // Todo: Filtrar por el criterio que corresponda
-            
+
+                var filtroNumerico = -1;
+                if (campofiltro.ToLower() == "categorias")
+                {
+                    Int32.TryParse(filtro, out filtroNumerico);
+                }
+
                 var tareasfiltrados =
                     campofiltro == "ALL" ? string.IsNullOrEmpty(filtro) ? tareas : tareas.Where(u => u.Nombre.RemoveDiacritics().Contains(filtro, StringComparison.CurrentCultureIgnoreCase) 
                                 || u.Descripcion.RemoveDiacritics().Contains(filtro, StringComparison.CurrentCultureIgnoreCase)
@@ -192,7 +198,7 @@ namespace ua.Models
                         : campofiltro.ToLower() == "descripcion" ? tareas.Where(u => u.Descripcion.RemoveDiacritics().Contains(filtro, StringComparison.CurrentCultureIgnoreCase))
                         : campofiltro.ToLower() == "nombre" ? tareas.Where(u => u.Nombre.RemoveDiacritics().Contains(filtro, StringComparison.CurrentCultureIgnoreCase))
                         : campofiltro.ToLower() == "activa" && filtro.ToLower() != "null" ? tareas.Where(u => u.Activa == (filtro.ToLower() == "true" ? true: false))
-                        : campofiltro.ToLower() == "categorias" ? tareas.Where(u => u.Categorias.Where(c => c.Nombre.RemoveDiacritics().Contains(filtro, StringComparison.CurrentCultureIgnoreCase)).Count() > 0)
+                        : campofiltro.ToLower() == "categorias" && !string.IsNullOrEmpty(filtro) ? tareas.Where(u => u.Categorias.Where(c => c.Id  == filtroNumerico).Count() > 0)
                         : tareas;
 
                 salida.NumeroRegistrosFiltrados = tareasfiltrados.Take(numeroregistros).Count();
