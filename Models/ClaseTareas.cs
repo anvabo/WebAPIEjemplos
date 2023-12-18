@@ -156,7 +156,8 @@ namespace ua.Models
 
        
 
-        public ClaseDataTable Obtener(int primerregistro = 0, int numeroregistros = 50, string campoorden = "", string orden = "ASC", string? filtro = "", string? campofiltro = "ALL")
+        public ClaseDataTable Obtener(int primerregistro = 0, int numeroregistros = 50, string campoorden = "", string orden = "ASC", string? filtro = "", 
+            string? campofiltro = "ALL", bool cargardatosadicionales = false)
         {
             var salida = new ClaseDataTable();
             var tareas = Data;
@@ -218,6 +219,12 @@ namespace ua.Models
             else
             {
                 salida.Registros = new List<ClaseTarea>();
+            }
+
+            // Miramos si hay que cargar datos adicionales (para desplegable de los filtros de los campos)
+            if (cargardatosadicionales)
+            {
+                salida.DatosAdicionales = DatosAdicionales();
             }
 
             return salida;

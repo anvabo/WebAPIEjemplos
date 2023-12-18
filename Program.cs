@@ -146,11 +146,11 @@ internal class Program
         }).WithMetadata(new SwaggerOperationAttribute("Recupera datos adicionales", "Devuelve un conjunto de listas de valores para campos adicionales")); ;
 
 
-        app.MapGet("/api/tareas", (string? filtro, int? resultadospagina, int? pagina, string? campoorden, string? orden, string? campofiltro, ClaseTareas tareas) =>
+        app.MapGet("/api/tareas", (string? filtro, int? resultadospagina, int? pagina, string? campoorden, string? orden, string? campofiltro, bool? cargardatosadicionales, ClaseTareas tareas) =>
         {
             var numeroregistrosReales = resultadospagina ?? 50;
             var paginaReales = pagina ?? 0;
-            return tareas.Obtener(paginaReales * numeroregistrosReales, numeroregistrosReales, campoorden ?? "", orden ?? "ASC", filtro ?? "", campofiltro ?? "ALL");
+            return tareas.Obtener(paginaReales * numeroregistrosReales, numeroregistrosReales, campoorden ?? "", orden ?? "ASC", filtro ?? "", campofiltro ?? "ALL", cargardatosadicionales ?? false);
         }).WithMetadata(new SwaggerOperationAttribute("Consulta para DataTables", "Devuelve un listado con las personas que cumplen los criterios de búsquedas")); ;
 
         app.MapGet("/api/tareas/{id}", (int id, ClaseTareas tareas) =>

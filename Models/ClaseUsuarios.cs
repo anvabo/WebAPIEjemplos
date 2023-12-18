@@ -274,7 +274,8 @@ namespace ua.Models
 
        
 
-        public ClaseDataTable Obtener(int primerregistro = 0, int numeroregistros = 50, string campoorden = "", string orden = "ASC", string? filtro = "", string? campofiltro = "ALL")
+        public ClaseDataTable Obtener(int primerregistro = 0, int numeroregistros = 50, string campoorden = "", string orden = "ASC", string? filtro = "", 
+            string? campofiltro = "ALL", bool cargardatosadicionales = false)
         {
             var salida = new ClaseDataTable();
             var usuarios = Data;
