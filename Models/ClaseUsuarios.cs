@@ -305,7 +305,7 @@ namespace ua.Models
                         : campofiltro.ToLower() == "activo" && filtro.ToLower() != "null" ? usuarios.Where(u => u.Activo == (filtro.ToLower() == "true" ? true: false)) 
                         : usuarios;
 
-                salida.NumeroRegistrosFiltrados = usuariosfiltrados.Take(numeroregistros).Count();
+                salida.NumeroRegistrosFiltrados = usuariosfiltrados.Count();
 
                 // Ordenamos
                 if (!string.IsNullOrEmpty(campoorden))
