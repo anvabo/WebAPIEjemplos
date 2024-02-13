@@ -30,9 +30,10 @@ internal class Program
         {
             options.AddPolicy("UA", policy =>
             {
-                policy.AllowAnyOrigin()
+                policy.SetIsOriginAllowed(origin => origin.EndsWith(".ua.es"))
                     .AllowAnyMethod()
-                    .AllowAnyHeader();
+                    .AllowAnyHeader()
+                    .AllowCredentials();
 
                 //policy.WithOrigins("https://localhost:3000")
                 //    .WithMethods("PUT, GET, POST, DELETE")
