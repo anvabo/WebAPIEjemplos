@@ -306,7 +306,7 @@ namespace ua.Models
                         : usuarios;
 
                 salida.NumeroRegistrosFiltrados = usuariosfiltrados.Count();
-
+                
                 // Ordenamos
                 if (!string.IsNullOrEmpty(campoorden))
                 {
@@ -323,7 +323,10 @@ namespace ua.Models
                 }
 
                 // Paginamos
-                salida.Registros = usuariosfiltrados.Skip(primerregistro).Take(numeroregistros);
+                if (numeroregistros > 0)
+                    salida.Registros = usuariosfiltrados.Skip(primerregistro).Take(numeroregistros);
+                else
+                   salida.Registros = usuariosfiltrados;
             }
             else
             {
