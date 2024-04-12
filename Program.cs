@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Cors;
 using Swashbuckle.AspNetCore.Annotations;
 using ua;
 using ua.Models;
+using WebAPIEjemplos.Models;
 
 internal class Program
 {
@@ -166,6 +167,17 @@ internal class Program
             {
                 return Results.Ok(usuario);
             }
+        });
+
+        app.MapGet("/api/claves", () =>
+        {
+            var aes = new ClaseAES();
+
+            return Results.Ok(new ClaseClaves()
+            {
+                Key = Convert.ToBase64String(aes.GenerarNumeroAleatorio(32)),
+                Iv = Convert.ToBase64String(aes.GenerarNumeroAleatorio(16))
+            });
         });
 
 
