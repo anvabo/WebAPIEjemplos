@@ -268,6 +268,11 @@ namespace ua.Models
                 }
             };
 
+            foreach (var tarea in listado)
+            {
+                tarea.Valoracion = new Random().Next(0, 100) + new Random().NextDouble();
+            }
+
 
             return listado;
         }
