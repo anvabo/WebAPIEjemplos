@@ -181,6 +181,13 @@ namespace ua.Models
                 // Todo: Filtrar por el criterio que corresponda
 
                 var filtroNumerico = -1;
+
+                if (campofiltro.Split('|').Count() > 1 && campofiltro.Split('|')[1] == "categorias")
+                {
+                    campofiltro = campofiltro.Split('|')[1];
+                    filtro = filtro.Split('|')[1];
+                }
+
                 if (campofiltro.ToLower() == "categorias")
                 {
                     Int32.TryParse(filtro, out filtroNumerico);
