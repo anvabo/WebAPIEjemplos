@@ -17,7 +17,7 @@ namespace ua.Models
         public bool Activo { get; set; } = true;
         public DateTime FehaNacimiento { get; set; } = DateTime.Now.Date;
         public bool SuperAdmin { get; set; } = false;
-
+        public double Valoracion { get; set; } = 0;
         public ClaseUsuario()
         {
         }

@@ -25,13 +25,17 @@ internal class Program
             x.EnableAnnotations();
         });
 
+        // Add basic health checks
+        builder.Services.AddHealthChecks().AddCheck<SampleHealthCheck>("Sample");
+        builder.Services.AddHealthChecksUI().AddInMemoryStorage();
+
 
         // Activar CORS
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("UA", policy =>
             {
-                policy.SetIsOriginAllowed(origin => origin.EndsWith(".ua.es"))
+                policy.SetIsOriginAllowed(origin => ((origin.EndsWith(".ua.es")) || origin == "https://localhost:3000"))
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials();
@@ -185,7 +189,11 @@ internal class Program
         app.UseSwagger();
         app.UseSwaggerUI();
 
-
+        app.MapHealthChecks("/nagios");
+        app.MapHealthChecksUI(setup =>
+        {
+            setup.UIPath = "/nagios-ui";  // Endpoint for the health check UI
+        });
 
         app.Run();
     }
