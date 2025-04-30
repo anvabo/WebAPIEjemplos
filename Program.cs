@@ -35,10 +35,11 @@ internal class Program
         {
             options.AddPolicy("UA", policy =>
             {
-                policy.SetIsOriginAllowed(origin => ((origin.EndsWith(".ua.es")) || origin == "https://localhost:3000"))
+                policy.AllowAnyOrigin()
                     .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials();
+                    .AllowAnyHeader();
+                //.AllowCredentials();
+                //.WithHeaders("Access-Control-Expose-Headers", "Content-Disposition");
 
                 //policy.WithOrigins("https://localhost:3000")
                 //    .WithMethods("PUT, GET, POST, DELETE")
@@ -56,6 +57,17 @@ internal class Program
 
 
         app.UseCors("UA");
+
+
+        app.Use(async (context, next) =>
+        {
+            context.Response.OnStarting(() =>
+            {
+                context.Response.Headers.Add("Access-Control-Expose-Headers", "Content-Disposition");
+                return Task.CompletedTask;
+            });
+            await next();
+        });
 
 
         // USUARIOS
@@ -120,6 +132,15 @@ internal class Program
             }
         });
 
+
+        // Documentos
+        app.MapGet("/api/documento/descargar", () =>
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "Docs", "Curso Accesibilidad.pdf");
+            var contenido = File.ReadAllBytes(path);
+
+            return Results.File(contenido, "application/pdf", "Curso Accesibilidad.pdf");           
+        });
 
         // TAREAS
         app.MapPost("/api/tareas", (ClaseTarea tarea, ClaseTareas tareas) =>
