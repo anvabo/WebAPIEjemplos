@@ -203,10 +203,11 @@ namespace ua.Models
                         : campofiltro.ToLower() == "categorias" && !string.IsNullOrEmpty(filtro) ? tareas.Where(u => u.Categorias.Where(c => c.Id  == filtroNumerico).Count() > 0)
                         : tareas;
 
-                if (numeroregistros > 0)
-                    salida.NumeroRegistrosFiltrados = tareasfiltrados.Take(numeroregistros).Count();
-                else
-                    salida.NumeroRegistrosFiltrados = tareasfiltrados.Count();
+                salida.NumeroRegistrosFiltrados = tareasfiltrados.Count();
+                //if (numeroregistros > 0)
+                //    salida.NumeroRegistrosFiltrados = tareasfiltrados.Take(numeroregistros).Count();
+                //else
+                //    salida.NumeroRegistrosFiltrados = tareasfiltrados.Count();
 
                 // Ordenamos
                 if (!string.IsNullOrEmpty(campoorden))

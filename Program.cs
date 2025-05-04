@@ -59,15 +59,15 @@ internal class Program
         app.UseCors("UA");
 
 
-        app.Use(async (context, next) =>
-        {
-            context.Response.OnStarting(() =>
-            {
-                context.Response.Headers.Add("Access-Control-Expose-Headers", "Content-Disposition");
-                return Task.CompletedTask;
-            });
-            await next();
-        });
+        //app.Use(async (context, next) =>
+        //{
+        //    context.Response.OnStarting(() =>
+        //    {
+        //        context.Response.Headers.Add("Access-Control-Expose-Headers", "Content-Disposition");
+        //        return Task.CompletedTask;
+        //    });
+        //    await next();
+        //});
 
 
         // USUARIOS
@@ -134,13 +134,23 @@ internal class Program
 
 
         // Documentos
-        app.MapGet("/api/documento/descargar", () =>
+        app.MapGet("/api/documento/descargar", (HttpContext context) =>
         {
+            //var contentDisposition = new System.Net.Mime.ContentDisposition
+            //{
+            //    FileName = "Curso Accesibilidad.pdf",
+            //    Inline = true // Fuerza la descarga
+            //};
+
+            //context.Response.Headers.Add("Access-Control-Expose-Headers", "Content-Disposition");
+            //context.Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
+
             var path = Path.Combine(Directory.GetCurrentDirectory(), "Docs", "Curso Accesibilidad.pdf");
             var contenido = File.ReadAllBytes(path);
 
-            return Results.File(contenido, "application/pdf", "Curso Accesibilidad.pdf");           
+            return Results.File(contenido, "application/pdf", "Nuevo fichero.pdf");
         });
+        
 
         // TAREAS
         app.MapPost("/api/tareas", (ClaseTarea tarea, ClaseTareas tareas) =>
