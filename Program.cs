@@ -103,6 +103,14 @@ internal class Program
             return usuarios.Obtener(paginaReales * numeroregistrosReales, numeroregistrosReales, campoorden ?? "", orden ?? "ASC", filtro ?? "", campofiltro ?? "ALL");
         }).WithMetadata(new SwaggerOperationAttribute("Consulta para DataTables", "Devuelve un listado con las personas que cumplen los criterios de búsquedas")); ;
 
+        app.MapGet("/api/usuarioslento", (string? filtro, int? resultadospagina, int? pagina, string? campoorden, string? orden, string? campofiltro, ClaseUsuarios usuarios) =>
+        {
+            var numeroregistrosReales = resultadospagina ?? 50;
+            var paginaReales = pagina ?? 0;
+            return usuarios.ObtenerLento(paginaReales * numeroregistrosReales, numeroregistrosReales, campoorden ?? "", orden ?? "ASC", filtro ?? "", campofiltro ?? "ALL");
+        }).WithMetadata(new SwaggerOperationAttribute("Consulta para DataTables", "Devuelve un listado con las personas que cumplen los criterios de búsquedas")); ;
+
+
         app.MapGet("/api/usuarios/{id}", (int id, ClaseUsuarios usuarios) =>
         {
             var usuario = usuarios.BuscarxId(id);
@@ -142,7 +150,7 @@ internal class Program
             //    Inline = true // Fuerza la descarga
             //};
 
-            //context.Response.Headers.Add("Access-Control-Expose-Headers", "Content-Disposition");
+            context.Response.Headers.Add("Access-Control-Expose-Headers", "Content-Disposition");
             //context.Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
 
             var path = Path.Combine(Directory.GetCurrentDirectory(), "Docs", "Curso Accesibilidad.pdf");
@@ -203,6 +211,14 @@ internal class Program
                 return Results.Ok(usuario);
             }
         });
+
+        app.MapGet("/api/tareaslento", (string? filtro, int? resultadospagina, int? pagina, string? campoorden, string? orden, string? campofiltro, bool? cargardatosadicionales, ClaseTareas tareas) =>
+        {
+            var numeroregistrosReales = resultadospagina ?? 50;
+            var paginaReales = pagina ?? 0;
+            return tareas.ObtenerLento(paginaReales * numeroregistrosReales, numeroregistrosReales, campoorden ?? "", orden ?? "ASC", filtro ?? "", campofiltro ?? "ALL", cargardatosadicionales ?? false);
+        }).WithMetadata(new SwaggerOperationAttribute("Consulta para DataTables", "Devuelve un listado con las personas que cumplen los criterios de búsquedas")); ;
+
 
         app.MapGet("/api/claves", () =>
         {

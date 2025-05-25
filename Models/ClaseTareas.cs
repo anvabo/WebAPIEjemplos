@@ -154,7 +154,14 @@ namespace ua.Models
             return listado;
         }
 
-       
+
+        public ClaseDataTable ObtenerLento(int primerregistro = 0, int numeroregistros = 50, string campoorden = "", string orden = "ASC", string? filtro = "",
+            string? campofiltro = "ALL", bool cargardatosadicionales = false) 
+        {
+            System.Threading.Thread.Sleep(5000);
+
+            return Obtener(primerregistro, numeroregistros, campoorden, orden, filtro, campofiltro, cargardatosadicionales);
+        }
 
         public ClaseDataTable Obtener(int primerregistro = 0, int numeroregistros = 50, string campoorden = "", string orden = "ASC", string? filtro = "", 
             string? campofiltro = "ALL", bool cargardatosadicionales = false)
